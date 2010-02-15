@@ -1,0 +1,21 @@
+<table cellpadding="4" cellspacing="0">
+	<tr>
+		<td style="text-align:center;width:35%;">#!bankname#</td>
+		<td style="text-align:center;width:35%;">#!bankbalance#</td>
+		<td style="text-align:center;width:35%;">#!bankstatus#</td>
+	</tr>
+	<tr>
+		<td colspan="3"><hr></td>
+	</tr>
+	#$content#
+	<tr>
+		<td colspan="3">
+			<form action="#%FLSES-adress#?" method="get">
+				<input type="hidden" name="menue" value="Bank">
+				<input type="hidden" name="submenue" value="create">
+				Name for your new Account: <input name="name" type="text" maxlength="30">
+				<input type="submit" value="Add">
+			</form>
+		</td>
+	</tr>
+</table>

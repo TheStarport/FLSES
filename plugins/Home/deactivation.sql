@@ -1,0 +1,1 @@
+DELETE FROM `flses_plugins` WHERE `classname` = 'Home';

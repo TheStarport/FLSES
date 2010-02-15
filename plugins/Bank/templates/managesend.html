@@ -1,0 +1,43 @@
+<script type="text/javascript" src="#%FLSES-adress#/js/livesearch.js"></script>
+
+<table cellpadding="0" cellspacing="0">
+	<tr>
+		<td> Account Name: #$name#</td>
+		<td style="text-align: right;"> Current Account Balance: $ #$balance#</td>
+	</tr>
+	<tr>
+		<td colspan="2"><hr width="350"></td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<form action="#%FLSES-adress#" method="get" width="100%" cellpadding="0" cellspacing="0">
+				<input type="hidden" name="menue" value="Bank">
+				<input type="hidden" name="submenue" value="manage">
+				<input type="hidden" name="id" value="#$id#">
+				<input type="hidden" name="action" value="push">
+				<table cellpadding="4" cellspacing="0" width="100%">
+					<tr>
+						<td> Amount: </td>
+						<td>
+							<input type="text" name="amount"/>
+						</td>
+						<td rowspan="2">
+							<input type="submit" value="Do it!">
+						</td>
+					</tr>
+					<tr>
+						<td> Char: </td>
+						<td>
+							<input type="text" id="txt1" size="26" onkeyup="showResult(this.value,
+		'#%FLSES-adress#/js/livesearch.php?x=y&val=usr')"/>
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><div id="livesearch"></div></td>
+					</tr>
+				</table>
+			</form>
+		</td>
+	</tr>
+</table>
