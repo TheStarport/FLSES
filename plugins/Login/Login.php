@@ -61,7 +61,7 @@ class Login
 				$res = mysql_query($sql);
 				$_SESSION['userid'] = $id;
 				$_SESSION['passwd'] = $pass;
-				$that->redirect('Home','overview','&message=New FLSES Account created!');
+				//$that->redirect('Home','overview','&message=New FLSES Account created!');
 			}
 		} else {
 			echo "hiho";

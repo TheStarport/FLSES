@@ -227,11 +227,11 @@ class Bank
 				if($row->status == "owner")
 				{
 					$users .= '<td width="33%">';
-					$users .= '<a style="color: #FF6600" href="'.cFlsesAdress.'?menue=Bank&submenue=managedel&id='.$account->id.'&usrid='.$row->userid.'">'.$result->name.'</a>';
+					$users .= '<a style="color: #FF6600" href="'.cFlsesAdress.'?menu=Bank&submenu=managedel&id='.$account->id.'&usrid='.$row->userid.'">'.$result->name.'</a>';
 					$users .= '</td>';
 				} else {
 					$users .= '<td width="33%">';
-					$users .= '<a href="'.cFlsesAdress.'?menue=Bank&submenue=managedel&id='.$account->id.'&usrid='.$row->userid.'">'.$result->name.'</a>';
+					$users .= '<a href="'.cFlsesAdress.'?menu=Bank&submenu=managedel&id='.$account->id.'&usrid='.$row->userid.'">'.$result->name.'</a>';
 					$users .= '</td>';
 				}
 			}

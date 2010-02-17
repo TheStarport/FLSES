@@ -27,8 +27,6 @@
 ##################################################################################
 
 header('Content-Type: text/html; charset=utf-8');  
-#ini_set('display_errors','Off'); 
-#error_reporting(0);
 session_start();
 
 $settings = parse_ini_file("./config.ini",true);
@@ -45,10 +43,10 @@ $language = "en";
 $flhook = new FLHook();
 $flses = new FLSES($flhook,$settings);
 
-if($_GET["menue"])
+if($_GET["menu"])
 {
-	$main = $_GET["menue"];
-	$sub = $_GET["submenue"];
+	$main = $_GET["menu"];
+	$sub = $_GET["submenu"];
 	if(!$sub)
 		$sub = "overview";
 	$flses->setClass($main);

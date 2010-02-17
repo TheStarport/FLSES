@@ -33,11 +33,11 @@ class FLSES extends Pluggable
 	
 	public function __construct($hook,$settings)
 	{
-		if($_GET['message'])
+		if( isset( $_GET['message']) )
 		{
 			$this->generatemessage($_GET['message'],"green");
 		}
-		if($_GET['error'])
+		if( isset($_GET['error']) )
 		{
 			$this->generatemessage($_GET['error'],"red");
 		}
@@ -46,9 +46,9 @@ class FLSES extends Pluggable
 	
 	public function checkuser($hook,$settings)
 	{
-		if($_SESSION['userid'])
+		if( isset($_SESSION['userid']) )
 		{
-			if($_SESSION['userid'] != 0 && $_SESSION['passwd'] != "")
+			if( $_SESSION['userid'] != 0 && $_SESSION['passwd'] != "")
 			{
 				$id = $_SESSION['userid'];
 				$pass = md5($_SESSION['passwd']);
@@ -63,18 +63,18 @@ class FLSES extends Pluggable
 						$this->user = $this->parseuserdata($this->userid,$settings);
 						$this->chars = $this->getuserchars($this->userid,$settings);
 						$this->active_plugins = parse_ini_file("./plugins/activated.ini",false);
-						$GLOBALS['menue'] = $this->generatemenue($_GET['menue'],$_GET['submenue'],$settings);
+						$GLOBALS['menu'] = $this->generatemenu($_GET['menu'],$_GET['submenu'],$settings);
 						$this->flhook = $hook;
 						$this->flhook->connect($settings);
 					} else {
-						if(!$_GET['menue'] == "Login")
+						if(!$_GET['menu'] == "Login")
 						{
 							$this->redirect("","","",$settings['FLSES']['forumadress']);
 							exit;
 						}
 					}
 				} else {
-					if(!$_GET['menue'] == "Login")
+					if(!$_GET['menu'] == "Login")
 					{
 						$this->redirect("","","",$settings['FLSES']['forumadress']);
 						exit;
@@ -82,7 +82,7 @@ class FLSES extends Pluggable
 				}
 			}
 		} else {
-			if(!$_GET['menue'] == "Login")
+			if(!$_GET['menu'] == "Login")
 			{
 				$this->redirect("","","",$settings['FLSES']['forumadress']);
 				exit;
@@ -90,13 +90,13 @@ class FLSES extends Pluggable
 		}
 	}
 	
-	public function generatemenue($main,$sub,$settings)
+	public function generatemenu($main,$sub,$settings)
 	{
 		if($main == "")
 			$main = "Home";
 		if($sub == "")
 			$sub = "overview";
-		$sql = "SELECT * FROM `".$settings['MySQL']['prefix']."menue` ORDER BY `order`;";
+		$sql = "SELECT * FROM `".$settings['MySQL']['prefix']."menu` ORDER BY `order`;";
 		$res = mysql_query($sql);
 		if($res)
 		{
@@ -134,16 +134,16 @@ class FLSES extends Pluggable
 				{
 					if($item['name'] == $main)
 					{
-						$template = new Template("./templates/menueitem.html");
-						$template->replace("menue",$item['class']);
-						$template->replace("submenue",$item['function']);
+						$template = new Template("./templates/menuitem.html");
+						$template->replace("menu",$item['class']);
+						$template->replace("submenu",$item['function']);
 						$template->replace("img",$item['img_on']);
 						$template->replace("height","60");
 						$main_html .= $template->output();
 					} else {
-						$template = new Template("./templates/menueitem.html");
-						$template->replace("menue",$item['class']);
-						$template->replace("submenue",$item['function']);
+						$template = new Template("./templates/menuitem.html");
+						$template->replace("menu",$item['class']);
+						$template->replace("submenu",$item['function']);
 						$template->replace("img",$item['img']);
 						$template->replace("height","60");
 						$main_html .= $template->output();
@@ -158,16 +158,16 @@ class FLSES extends Pluggable
 					{
 						if($item['function'] == $sub)
 						{
-							$template = new Template("./templates/menueitem.html");
-							$template->replace("menue",$item['class']);
-							$template->replace("submenue",$item['function']);
+							$template = new Template("./templates/menuitem.html");
+							$template->replace("menu",$item['class']);
+							$template->replace("submenu",$item['function']);
 							$template->replace("img",$item['img_on']);
 							$template->replace("height","40");
 							$sub_html .= $template->output();
 						} else {
-							$template = new Template("./templates/menueitem.html");
-							$template->replace("menue",$item['class']);
-							$template->replace("submenue",$item['function']);
+							$template = new Template("./templates/menuitem.html");
+							$template->replace("menu",$item['class']);
+							$template->replace("submenu",$item['function']);
 							$template->replace("img",$item['img']);
 							$template->replace("height","40");
 							$sub_html .= $template->output();
@@ -177,8 +177,8 @@ class FLSES extends Pluggable
 			}
 			
 			$template = new Template("./templates/menu.html");
-			$template->replace("mainmenue",$main_html);
-			$template->replace("submenue",$sub_html);
+			$template->replace("mainmenu",$main_html);
+			$template->replace("submenu",$sub_html);
 			return $template->output();
 		}
 	}
@@ -332,12 +332,12 @@ class FLSES extends Pluggable
 		return($code);
 	}
 	
-	function redirect($menue="",$submenue="",$string="",$url="")
+	function redirect($menu="",$submenu="",$string="",$url="")
 	{
 		global $settings;
 		if(!$url)
 		{
-			$url = $settings['FLSES']['adress'].'?menue='.$menue.'&submenue='.$submenue.$string;
+			$url = $settings['FLSES']['adress'].'?menu='.$menu.'&submenu='.$submenu.$string;
 		}
 		echo '	<html>
 			<head>

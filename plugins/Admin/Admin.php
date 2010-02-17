@@ -92,12 +92,12 @@ class Admin extends Pluggable
 			if(isset($that->active_plugins[$name]))
 			{
 				$out .= "<td style=\"color:green;\"> activated </td>";
-				$out .= "<td><a href=\"?menue=Admin&submenue=dounplug&plugin=".$plugin['Plugin']['name']."\"> Deactivate! </a></td>";
+				$out .= "<td><a href=\"?menu=Admin&submenu=dounplug&plugin=".$plugin['Plugin']['name']."\"> Deactivate! </a></td>";
 			} elseif($requires != "") {
 				$out .= "<td colspan=\"2\" style=\"color:red;\"> Requirements not fulfilled! </td>";
 			} else {
 				$out .= "<td style=\"color:red;\"> not activated </td>";
-				$out .= "<td><a href=\"?menue=Admin&submenue=doplug&plugin=".$plugin['Plugin']['name']."\"> Activate! </a></td>";
+				$out .= "<td><a href=\"?menu=Admin&submenu=doplug&plugin=".$plugin['Plugin']['name']."\"> Activate! </a></td>";
 			}
 			$out .= "</tr>";
 			$out .= "<tr>";
