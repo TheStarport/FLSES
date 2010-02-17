@@ -649,10 +649,10 @@ CREATE TABLE IF NOT EXISTS `flses_menue` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Daten für Tabelle `flses_menue`
+-- Daten für Tabelle `flses_menu`
 --
 
-INSERT INTO `flses_menue` (`parent`, `name`, `order`, `img`, `img_on`, `access`, `class`, `function`) VALUES
+INSERT INTO `flses_menu` (`parent`, `name`, `order`, `img`, `img_on`, `access`, `class`, `function`) VALUES
 ('', 'Bank', 40, 0x2e2f696d616765732f737562436f6d6d6f64697479426c75652e676966, '', '', 0x42616e6b, 0x6f76657276696577),
 ('Bank', 'Bank - Overview', 10, 0x2e2f696d616765732f737562436f6d6d6f64697479426c75652e676966, '', '', 0x42616e6b, 0x6f76657276696577),
 ('', 'Guild', 50, 0x696d616765732f636c616e5f6f66662e676966, 0x696d616765732f636c616e5f6f6e2e676966, '', 0x4775696c64, 0x6f76657276696577),
