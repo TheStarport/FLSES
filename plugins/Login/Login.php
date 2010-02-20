@@ -28,6 +28,17 @@
 
 class Login
 {	
+
+	public function __construct($that,$settings,$dir)
+	{
+		new Language($dir);
+		$this->dir = $dir;
+	}
+	
+	/**
+	* Log in a user.
+	* Can be either with a name or with an ID
+	*/
 	public function dologin($that,$settings)
 	{
 		$_SESSION['userid'] = "";
@@ -61,19 +72,109 @@ class Login
 				$res = mysql_query($sql);
 				$_SESSION['userid'] = $id;
 				$_SESSION['passwd'] = $pass;
-				//$that->redirect('Home','overview','&message=New FLSES Account created!');
+				$that->redirect('Home','overview','&message=New FLSES Account created!');
 			}
-		} else {
-			echo "hiho";
+		} else if($name){
+
+			$charname = htmlentities($_GET['name']);
+			$password= md5(htmlentities($_GET['pass']));
+
+			$sql = mysql_query("SELECT id, name, password FROM `".$settings['MySQL']['prefix']."users` WHERE `name`='{$charname}' AND `password`='{$password}'");
+		
+			if( mysql_num_rows($sql) == 1)
+			{
+				while( $res = mysql_fetch_object( $sql ))
+				{
+					if($password == $res->password)
+					{
+						$_SESSION['userid'] = $res->id;
+						$_SESSION['passwd'] = htmlentities( $_GET['pass']);
+						$that->redirect('Home','overview');
+					}
+					else
+					{
+						$that->redirect('Login', 'overview', '&error=Bad Login/Password');
+					}
+				}
+			}
+			else
+			{
+				$that->redirect('Login', 'overview', '&error=Bad Login/Password');
+			}
 			#TODO: Login with name - Not supported yet! And maybe won't be ever.
 		}
 	}
 	
+	/**
+	* Disconnect a user
+	*/
 	public function dologout($that,$settings)
 	{
 		$_SESSION['userid'] = null;
 		$_SESSION['passwd'] = null;
-		#$that->redirect("","","",cForumAdress);
+		session_destroy();
+		$that->redirect('Login','overview','&message=You have been logged out');
 	}
+	
+	/**
+	* Default displayed Block. Called if no submenu
+	* Display a login form to the user.
+	*/
+	public function overview($that, $settings)
+	{
+		$template = new Template("{$this->dir}templates/overview.html");
+		$content = $template->output();
+		
+		$template = new Template("./templates/main.html");
+		$template->replace("title","FLSES - Login");
+		$template->replace("bigtitle","Login");
+		$template->replace("content",$content);
+		print $template->output();
+	}
+	
+	/**
+	* Display a registering form to the user. Normally, called if the user clicks on the register link.
+	*/
+	public function register_form($that,$settings)
+	{
+		$template = new Template("{$this->dir}templates/register_form.html");
+		$content = $template->output();
+		
+		$template = new Template("./templates/main.html");
+		$template->replace("title","FLSES - Register");
+		$template->replace("bigtitle","Register");
+		$template->replace("content",$content);
+		print $template->output();
+	}
+	
+	/**
+	* Register a new user with datas given in a form.
+	*/
+	public function doregister($that,$settings)
+	{
+		$pass = md5(htmlentities($_GET['pass']));
+		$pass_check = md5(htmlentities($_GET['pass_check']));
+		$name = htmlentities($_GET['name']);
+		
+		$sql = mysql_query("SELECT name FROM `".$settings['MySQL']['prefix']."users` WHERE `name`='{$name}'");
+		
+		if($pass != $pass_check)
+		{
+			$that->redirect('Login', 'register_form', '&error=Passwords do not match !');
+		}	
+		else if(mysql_num_rows($sql) == 1)
+		{
+			$that->redirect('Login', 'register_form', '&error=Name already registered !');
+		}
+		else
+		{
+			$sql = "INSERT INTO `".$settings['MySQL']['prefix']."users` 
+						(`id` ,`name` ,`password` ,`access`) 
+						VALUES ('', '{$name}', '{$pass}', '');";
+			mysql_query($sql);
+			$that->redirect('Login', 'overview', '&message=You are now registered. Please log in !');
+		}
+	}
+		
 }
 ?>

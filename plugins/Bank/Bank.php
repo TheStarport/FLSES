@@ -146,12 +146,11 @@ class Bank
 								$_GET['amount']))
 					{
 						//TODO: Change that Message!
-						$that->flhook->msg(html_entity_decode($_GET['player']),"You just recieved ".$_GET['amount']."$ from ".$that->user->name)
+						$that->flhook->msg(html_entity_decode($_GET['player']),"You just recieved ".$_GET['amount']."$ from ".$that->user->name);
 						
 						//TODO: Add statement handling here!
 						
-						$sql = "UPDATE `".$settings['MySQL']['prefix']."bankaccounts` SET 
-							`money` = '".$moneyleft."' WHERE `id` =14";
+						$sql = "UPDATE `".$settings['MySQL']['prefix']."bankaccounts` SET `money` = '".$moneyleft."' WHERE `id` = 14";
 						$res = mysql_query($sql);
 						$that->redirect("Bank","manage","&id=".$id."&message=Money is on it's way!");
 					}
@@ -178,7 +177,7 @@ class Bank
 				if($cashleft >= 0)
 				{
 					//TODO: Change that Message!
-					$that->flhook->msg(html_entity_decode($_GET['player']),"You just recieved ".$_GET['amount']."$ from ".$that->user->name)
+					$that->flhook->msg(html_entity_decode($_GET['player']),"You just recieved ".$_GET['amount']."$ from ".$that->user->name);
 					
 					$flhook->addcash($player,-$_GET['amount']);
 					

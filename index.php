@@ -26,7 +26,8 @@
 ##                                                                              ##
 ##################################################################################
 
-header('Content-Type: text/html; charset=utf-8');  
+header('Content-Type: text/html; charset=utf-8');
+error_reporting(E_ALL ^ E_NOTICE);
 session_start();
 
 $settings = parse_ini_file("./config.ini",true);

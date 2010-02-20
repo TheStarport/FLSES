@@ -47,4 +47,11 @@ select
 {
 	font-size: 13px;
 }
+
+
+label {
+display:block;
+width:125px;
+float:left;
+}
 -->

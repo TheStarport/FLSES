@@ -33,8 +33,9 @@ class FLHook extends Pluggable
 {
 	public $conn;
 	
-	function connect($settings)
+	function connect()
 	{
+		$settings = parse_ini_file("./config.ini",true);
 		$this->conn = new telnet($settings['FLHook']['host'],$settings['FLHook']['port']);
 		
 		if ( $this->conn->sock ) {
@@ -46,6 +47,22 @@ class FLHook extends Pluggable
 			return true;
 		} else {
 			exit("FLHook or Server down!");
+		}
+	}
+	
+	/**
+	* Send a command to the server.
+	* @param : The command and the parameters to send
+	* @return : The result of the command or FALSE if an error occurred
+	*/
+	function sendCommand($command)
+	{
+		$return = '';
+		if ( $this->conn->sock ) {
+			$this->conn->write("$command\r\n");
+			return $this->conn->read_till('OK');
+		} else {
+			return false;
 		}
 	}
 }

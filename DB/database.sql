@@ -633,10 +633,10 @@ INSERT INTO `flses_logs` (`user`, `plugin`, `action`, `message`, `date`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `flses_menue`
+-- Tabellenstruktur für Tabelle `flses_menu`
 --
 
-CREATE TABLE IF NOT EXISTS `flses_menue` (
+CREATE TABLE IF NOT EXISTS `flses_menu` (
   `parent` varchar(20) collate utf8_bin NOT NULL,
   `name` varchar(20) collate utf8_bin NOT NULL,
   `order` int(11) NOT NULL,

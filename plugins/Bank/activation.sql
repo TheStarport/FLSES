@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `flses_bankaccounts` (
 
 -- Generate the Menue Entrys --
 
-INSERT INTO `flses_menue` (`parent`, `name`, `order`, `img`, `img_on`, `access`, `class`, `function`) VALUES
+INSERT INTO `flses_menu` (`parent`, `name`, `order`, `img`, `img_on`, `access`, `class`, `function`) VALUES
 ('', 'Bank', 10, './images/subCommodityBlue.gif', '', '', 'Bank', 'overview'),
 ('Bank', 'Bank - Overview', 1, './images/subCommodityBlue.gif', '', '', 'Bank', 'overview');
 

@@ -50,8 +50,10 @@ class Home
 	public function connect_form($that,$settings)
 	{
 		$char = $_POST['char'];
-		
+		$char = "Kid";
+		echo $char;
 		$_SESSION['connectcodes'][$char] = $that->sendcode($char);
+		echo $_SESSION['connectcodes'][$char];
 		
 		$template = new Template("{$this->dir}templates/codeform.html");
 		$template->replace("char",$char);
@@ -67,7 +69,7 @@ class Home
 	public function doconnect($that,$settings)
 	{
 		$charname = $_POST['char'];
-		$code = $_POST['code'];
+		$code = $_GET['code'];
 		
 		if($_SESSION['connectcodes'][$charname] == $code || $code == "00")
 		{
