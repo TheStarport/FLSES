@@ -21,7 +21,7 @@
 
 class messagingcontrol
 {
-	function msg($that,$player,$text,$type="player")
+	function msg($that,$settings,$player,$text,$type="player")
 	{
 		if($type == "player")
 		{
@@ -34,7 +34,7 @@ class messagingcontrol
 			return $result;
 		}
 	}
-	function fmsg($that,$player,$text,$type="player")
+	function fmsg($that,$settings,$player,$text,$type="player")
 	{
 		if($type == "player")
 		{
@@ -47,13 +47,13 @@ class messagingcontrol
 			return $result;
 		}
 	}
-	function msgu($that,$text)
+	function msgu($that,$settings,$text)
 	{
 		$that->conn->write("msgu ".$text."\r\n"); 
 		$result = $that->conn->read_till('OK');
 		return $result;
 	}
-	function fmsgu($that,$text)
+	function fmsgu($that,$settings,$text)
 	{
 		$that->conn->write("fmsgu ".$text."\r\n"); 
 		$result = $that->conn->read_till('OK'); 

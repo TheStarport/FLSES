@@ -36,7 +36,7 @@ class Admin extends Pluggable
 		{
 			$that->redirect("Home","overview");
 		}
-		#Import our Utils for File Actions
+		# Import our Utils for File Actions
 		$this->setClass("Utils");
 	}
 
@@ -49,12 +49,12 @@ class Admin extends Pluggable
 		$template->replace("title",$title);
 		$template->replace("bigtitle","OVERVIEW");
 		$template->replace("content",$content);
-		print $template->output();
+		$that->output = $template->output();
 	}
 	
 	public function plugins($that,$settings)
 	{
-		#The Access Level has to be greater than 10 to access Plugin Management.
+		# The Access Level has to be greater than 10 to access Plugin Management.
 		if($that->user->access['admin'] < 10)
 		{
 			$that->redirect("Home","overview");
@@ -113,12 +113,12 @@ class Admin extends Pluggable
 		$template->replace("title",$title);
 		$template->replace("bigtitle","OVERVIEW");
 		$template->replace("content",$content);
-		print $template->output();
+		$that->output = $template->output();
 	}
 	
 	public function doplug($that,$settings)
 	{
-		#The Access Level has to be greater than 10 to access Plugin Activation.
+		# The Access Level has to be greater than 10 to access Plugin Activation.
 		if($that->user->access['admin'] < 10)
 		{
 			$that->redirect("Home","overview");
@@ -146,24 +146,25 @@ class Admin extends Pluggable
 		}
 		if($plugin_found)
 		{
-			#Insert the Database Settings from an SQL File
+			# Insert the Database Settings from an SQL File
 			if($data['DB']['on-activation'])
 			{
 				$activ_file = str_replace("./",$plugin_dir,$data['DB']['on-activation']);
 				$this->execMySQLFile($activ_file,$data['DB']['replacements'],$plugin_dir);
 			}
-			#Set the Plugin as activated
+			# Set the Plugin as activated
 			$activated[$plugin_fixed] = $data['Plugin']['version'];
 			$this->write_ini_file($activated,"./plugins/activated.ini",FALSE);
-			#Bring the Admin back to Plugin Overview
+			# Add a Log Entry
 			$that->log("Admin","doplug","Activated the \"{$plugin}\" Plugin");
-			#$that->redirect("Admin","plugins");
+			# Bring the Admin back to Plugin Overview
+			$that->redirect("Admin","plugins");
 		}
 	}
 	
 	public function dounplug($that,$settings)
 	{
-		#The Access Level has to be greater than 10 to access Plugin Deactivation.
+		# The Access Level has to be greater than 10 to access Plugin Deactivation.
 		if($that->user->access['admin'] < 10)
 		{
 			$that->redirect("Home","overview");
@@ -190,18 +191,19 @@ class Admin extends Pluggable
 		}
 		if($plugin_found)
 		{
-			#Insert the Database Settings from an SQL File
+			# Insert the Database Settings from an SQL File
 			if($data['DB']['on-deactivation'])
 			{
 				$deactiv_file = str_replace("./",$plugin_dir,$data['DB']['on-deactivation']);
 				$this->execMySQLFile($deactiv_file,$data['DB']['replacements'],$plugin_dir);
 			}
-			#Set the Plugin as not activated
+			# Set the Plugin as not activated
 			unset($activated[$plugin_fixed]);
 			$this->write_ini_file($activated,"./plugins/activated.ini",FALSE);
-			#Bring the Admin back to Plugin Overview
+			# Add an Log entry
 			$that->log("Admin","dounplug","Deactivated the \"{$plugin}\" Plugin");
-			#$that->redirect("Admin","plugins");
+			# Bring the Admin back to Plugin Overview
+			$that->redirect("Admin","plugins");
 		}
 	}
 }

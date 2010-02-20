@@ -31,7 +31,7 @@ class Home
 		$template->replace("title","FLSES - Home");
 		$template->replace("bigtitle","HOME");
 		$template->replace("content",$content);
-		print $template->output();
+		$that->output = $template->output();
 	}
 	
 	public function connect($that,$settings)
@@ -44,7 +44,7 @@ class Home
 		$template->replace("title","FLSES - Connect Char");
 		$template->replace("bigtitle","CONNECT CHAR");
 		$template->replace("content",$content);
-		print $template->output();
+		$that->output = $template->output();
 	}
 	
 	public function connect_form($that,$settings)
@@ -63,7 +63,7 @@ class Home
 		$template->replace("title","FLSES - Connect Char");
 		$template->replace("bigtitle","CONNECT CHAR");
 		$template->replace("content",$content);
-		print $template->output();
+		$that->output = $template->output();
 	}
 	
 	public function doconnect($that,$settings)

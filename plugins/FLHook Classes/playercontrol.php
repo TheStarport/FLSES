@@ -34,7 +34,7 @@ class playercontrol
 #			return $result;
 #		}
 #	}
-	function setrep($that,$player,$faction,$value,$type="player")
+	function setrep($that,$settings,$player,$faction,$value,$type="player")
 	{
 		if($type == "player")
 			$that->conn->write("setrep ".$player." ".$faction." ".$value."\r\n");
@@ -45,7 +45,7 @@ class playercontrol
 		return true;
 	}
 	
-	function savechar($that,$player,$type="player")
+	function savechar($that,$settings,$player,$type="player")
 	{#savechar <charname>
 		if($type == "player")
 			$that->conn->write("savechar ".$player."\r\n");
@@ -54,13 +54,13 @@ class playercontrol
 		$result = $that->conn->read_till('OK');
 		return true;
 	}
-	function rename($that,$player,$newname)
+	function rename($that,$settings,$player,$newname)
 	{#rename <oldcharname> <newcharname>
 		$that->conn->write("rename ".$player." ".$newname."\r\n"); 
 		$result = $that->conn->read_till('OK'); 
 		return $result;
 	}
-	function getclientid($that,$player)
+	function getclientid($that,$settings,$player)
 	{#getclientid <charname>
 		$that->conn->write("getclientid ".$player."\r\n"); 
 		$result = $that->conn->read_till('OK');
@@ -72,7 +72,7 @@ class playercontrol
 			return substr($result,9);
 		}
 	}
-	function getplayerinfo($that,$player,$type="player")
+	function getplayerinfo($that,$settings,$player,$type="player")
 	{#getplayerinfo <charname>
 		if($type == "player")
 			$that->conn->write("getplayerinfo ".$player."\r\n");
@@ -98,7 +98,7 @@ class playercontrol
 #		$that->conn->write("$cmd\r\n"); 
 #		$result = $that->conn->read_till('OK'); 
 #	}
-	function isloggedin($that,$player)
+	function isloggedin($that,$settings,$player)
 	{#isloggedin <charname>
 		$that->conn->write("isloggedin ".$player."\r\n"); 
 		$result = $that->conn->read_till('OK');
@@ -109,7 +109,7 @@ class playercontrol
 		else
 			return true;
 	}
-	function isonserver($that,$player)
+	function isonserver($that,$settings,$player)
 	{#isonserver <charname>
 		$that->conn->write("isonserver ".$player."\r\n"); 
 		$result = $that->conn->read_till('OK');

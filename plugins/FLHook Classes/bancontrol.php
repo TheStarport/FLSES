@@ -21,7 +21,7 @@
 
 class bancontrol
 {
-	function kick($that,$player,$reason,$type="player")
+	function kick($that,$settings,$player,$reason,$type="player")
 	{#kick <charname> <reason>
 		if($type == "player")
 		{
@@ -33,7 +33,7 @@ class bancontrol
 		}
 		return $result;
 	}
-	function ban($that,$player,$type="player")
+	function ban($that,$settings,$player,$type="player")
 	{#ban <charname>
 		if($type == "player")
 		{
@@ -45,7 +45,7 @@ class bancontrol
 		}
 		return $result;
 	}
-	function kickban($that,$player,$reason,$type="player")
+	function kickban($that,$settings,$player,$reason,$type="player")
 	{#kickban <charname> <reason>
 		if($type == "player")
 		{
@@ -57,7 +57,7 @@ class bancontrol
 		}
 		return $result;
 	}
-	function unban($that,$name)
+	function unban($that,$settings,$name)
 	{#unban <charname>
 		$that->conn->write("unban ".$name."\r\n"); 
 		$result = $that->conn->read_till('OK'); 

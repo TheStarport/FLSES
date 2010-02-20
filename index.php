@@ -56,4 +56,6 @@ if($_GET["menu"])
 	$flses->setClass("Home");
 	$flses->overview();
 }
+
+print $flses->output;
 ?>

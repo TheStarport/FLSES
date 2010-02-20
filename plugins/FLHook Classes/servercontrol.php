@@ -21,7 +21,7 @@
 
 class servercontrol
 {
-	function getplayers($that)
+	function getplayers($that,$settings)
 	{#getplayers
 		$that->conn->write("getplayers\r\n"); 
 		$playerinfos = $that->conn->read_till('OK');
@@ -39,7 +39,7 @@ class servercontrol
 		return $result;
 	}
 	
-	function getplayersinselect($that,$status=null)
+	function getplayersinselect($that,$settings,$status=null)
 	{
 		foreach($that->getplayers() as $user)
 		{
@@ -64,7 +64,7 @@ class servercontrol
 		return $users;
 	}
 	
-	function getplayerids($that)
+	function getplayerids($that,$settings)
 	{#getplayerids
 		$that->conn->write("getplayerids\r\n"); 
 		$result = $that->conn->read_till('OK');
@@ -82,7 +82,7 @@ class servercontrol
 	#	$that->conn->write("$cmd\r\n"); 		#	???????
 	#	$result = $that->conn->read_till('OK'); 	#	???????
 	#}
-	function serverinfo($that)
+	function serverinfo($that,$settings)
 	{#serverinfo
 		$that->conn->write("serverinfo\r\n"); 
 		$result = $that->conn->read_till('OK');

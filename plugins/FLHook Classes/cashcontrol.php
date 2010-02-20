@@ -21,7 +21,7 @@
 
 class cashcontrol
 {
-	function getcash($that,$player,$type="player") #done
+	function getcash($that,$settings,$player,$type="player") #done
 	{#getcash <charname>
 		if($type == "player")
 		{
@@ -36,7 +36,7 @@ class cashcontrol
 		parse_str($result);
 		return $cash;
 	}
-	function setcash($that,$player,$amount,$type="player") #done
+	function setcash($that,$settings,$player,$amount,$type="player") #done
 	{#setcash <charname> <amount>
 		if($type == "player")
 		{
@@ -52,7 +52,7 @@ class cashcontrol
 		if($cash == $amount) { return true; } 
 		else { return false; }
 	}
-	function addcash($that,$player,$amount,$type="player") #done
+	function addcash($that,$settings,$player,$amount,$type="player") #done
 	{#addcash <charname> <amount>
 		if($type == "player")
 		{

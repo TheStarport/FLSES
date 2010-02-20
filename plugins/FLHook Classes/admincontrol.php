@@ -21,7 +21,7 @@
 
 class admincontrol
 {
-	function setadmin($that,$player,$level,$type="player")
+	function setadmin($that,$settings,$player,$level,$type="player")
 	{#setadmin <charname> <rights>
 		if($type == "player")
 		{
@@ -33,7 +33,7 @@ class admincontrol
 		}
 		return $result;
 	}
-	function getadmin($that,$player,$type="player")
+	function getadmin($that,$settings,$player,$type="player")
 	{#getadmin <charname>
 		if($type == "player")
 		{
@@ -47,7 +47,7 @@ class admincontrol
 		parse_str($result);
 		return $rights;
 	}
-	function deladmin($that,$player,$type="player")
+	function deladmin($that,$settings,$player,$type="player")
 	{#deladmin <charname>
 		if($type == "player")
 		{
