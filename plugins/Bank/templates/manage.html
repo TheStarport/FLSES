@@ -1,3 +1,5 @@
+<script type="text/javascript" src="#%FLSES-adress#/js/livesearch.js"></script>
+
 <table cellpadding="4" cellspacing="0">
 	<tr>
 		<td>
@@ -37,6 +39,18 @@
 					<td colspan="3"> red = owner, blue = user<br>
 					Click on someone to kick him out!</td>
 				</tr>
+				<tr>
+					<td colspan="3">
+					<form method="GET" action="#%FLSES-adress#">
+					<input type="hidden" name="menu" value="Bank" />
+					<input type="hidden" name="submenu" value="manageadd" />
+					<input type="hidden" name="id" value="#$id#" />
+					<label for="addchar">Add a user : </label><input type="text" name="username" id="txt1" onkeyup="showResult(this.value,'#%FLSES-adress#/js/livesearch.php?x=y&val=usr')" />
+					<input type="submit" value="Do it" />
+					</form>
+					<div id="livesearch"></div>
+					</td>
+				</tr>
 			</table>
 		</td>
 	</tr>
@@ -44,64 +58,12 @@
 		<td colspan="3"><hr></td>
 	</tr>
 	<tr>
-		<td>
-			Transfer Money to Player:
-		</td>
-		<td colspan="2">
-			<form action="#%FLSES-adress#" method="get" width="100%">
-				<input type="hidden" name="menu" value="Bank">
-				<input type="hidden" name="submenu" value="manage">
-				<input type="hidden" name="id" value="#$id#">
-				<input type="hidden" name="action" value="push">
-				<table cellpadding="4" cellspacing="0">
-					<tr>
-						<td>
-							<select name="player" STYLE="width: 100%">
-								#$players#
-							</select>
-						</td>
-						<td rowspan="2">
-							<input type="submit" value="Do it!">
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Amount: <input name="amount" width="100%">
-						</td>
-					</tr>
-				</table>
-			</form>
-		</td>
+		<td><a href="#%FLSES-adress#?menu=Bank&submenu=getmoney&id=#$id#">Pull money from a character !</a></td>
 	</tr>
 	<tr>
 		<td colspan="3"><hr></td>
 	</tr>
 	<tr>
-		<td>Pull Money from this Account: </td>
-		<td colspan="2">
-			<form action="#%FLSES-adress#" method="get">
-				<input type="hidden" name="menu" value="Bank">
-				<input type="hidden" name="submenu" value="manage">
-				<input type="hidden" name="id" value="#$id#">
-				<input type="hidden" name="action" value="pull">
-				<table cellpadding="4" cellspacing="0">
-					<tr>
-						<td>
-							<select name="player" STYLE="width: 100%">
-								#$players#
-							</select>
-						</td>
-						<td rowspan="2">
-							<input type="submit" value="Do it!">
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Amount: <input name="amount" width="100%">
-						</td>
-					</tr>
-				</table>
-			</form>
-		</td>
+		<td><a href="#%FLSES-adress#?menu=Bank&submenu=sendmoney&id=#$id#">Push money to a character !</a></td>
 	</tr>
 </table>

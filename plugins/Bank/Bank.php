@@ -79,6 +79,9 @@ class Bank
 		print $template->output();
 	}
 	
+	/**
+	* Create a new bank account
+	*/
 	public function create($that,$settings)
 	{
 		$name = $_GET['name'];
@@ -95,6 +98,9 @@ class Bank
 		$that->redirect("Bank","overview","&message=Account created!");
 	}
 	
+	/**
+	* Delete a bank account
+	*/
 	public function managedel($that,$settings)
 	{
 		$id = $_GET['id'];
@@ -114,45 +120,56 @@ class Bank
 		
 	}
 	
+	/**
+	* Add an user to the current bank account
+	*/
 	public function manageadd($that,$settings)
 	{
-		$id = $_GET['id'];
+		$id = htmlentities($_GET['id']);
 		$account = $this->accounts[$id];
 		if($account->status == "owner")
 		{
 			if($_GET['username'])
 			{
-				$sql = "INSERT (`accountid`) INTO `".$settings['MySQL']['prefix']."bankaccess` SELECT id FROM `users` WHERE 
-					`name`='".$_GET['username']."'";
-				$res = mysql_query($sql);
-				$that->redirect("Bank","manage","&id=".$id."&message=User added!");
+				$sql = mysql_query("SELECT id FROM `".$settings['MySQL']['prefix']."users` WHERE `name`='".$_GET['username']."'");
+				while($res = mysql_fetch_object($sql))
+				{
+					$add_id = $res->id;
+				}
+				$req = mysql_query("INSERT INTO `".$settings['MySQL']['prefix']."bankaccess` VALUES ('{$add_id}', '{$id}', 'user')");
+				$that->redirect("Bank","manage","&id={$id}&message=User added !");
 			}
 		}
 		
 	}
 	
+	/**
+	* Send money to a ingame char
+	*/
 	public function managepush($that,$settings)
 	{
+		global $flhook;
 		$id = $_GET['id'];
 		$account = $this->accounts[$id];
+		$player = htmlentities($_GET['player']);
 		if($account)
 		{
 			if($account->status == "owner")
 			{
 				$moneyleft = $account->money - $_GET['amount'];
-				if($moneyleft >= 0 && $moneyleft <= $account->money)
+				if($moneyleft >= 0 && $moneyleft <= $account->money) // We have to be sure that the user can do that
 				{
-					if($that->flhook->addcash(html_entity_decode($_GET['player']),
-								$_GET['amount']))
+					if($that->flhook->addcash($player,$_GET['amount'])) // If the operation's state is OK
 					{
-						//TODO: Change that Message!
-						$that->flhook->msg(html_entity_decode($_GET['player']),"You just recieved ".$_GET['amount']."$ from ".$that->user->name);
+						if($flhook->isloggedin($_GET['player']))
+						{
+						$that->flhook->msg($player,"You just received ".$_GET['amount']."$ from ".$account->name);
+						}
 						
-						//TODO: Add statement handling here!
-						
-						$sql = "UPDATE `".$settings['MySQL']['prefix']."bankaccounts` SET `money` = '".$moneyleft."' WHERE `id` = 14";
+						$sql = "UPDATE `".$settings['MySQL']['prefix']."bankaccounts` SET `money` = '".$moneyleft."' WHERE `id` = {$id}";
 						$res = mysql_query($sql);
-						$that->redirect("Bank","manage","&id=".$id."&message=Money is on it's way!");
+						mysql_query("INSERT INTO `".$settings['MySQL']['prefix']."bankstatements` VALUES ('{$id}', '', '{$_GET['amount']} $ has been sent to player {$player} by user {$that->user->name}')") or die(mysql_error());
+						$that->redirect("Bank","manage","&id=".$id."&message=Money has been sent !");
 					}
 				} else {
 					$that->redirect("Bank","manage","&id=".$id."&error=Not enough Money on Account!");
@@ -165,32 +182,46 @@ class Bank
 		}
 	}
 	
+	/**
+	* Pull money of a ingame char to an account.
+	*/
 	public function managepull($that,$settings)
 	{
-		$player = html_entity_decode($_GET['player']);
-		if(in_array($player,$that->chars))
+		global $flhook;
+		$player = htmlentities($_GET['player']);
+		$belong = FALSE;
+		$id = htmlentities($_GET['id']);
+		$account = $this->accounts[$id];
+		foreach($that->chars as $char)
 		{
-			if($flhook->isloggedin($player))
+			if($char[charname] == $player)
 			{
-				$cashleft = $flhook->getcash($player) - $_GET['amount'];
-				$moneyleft = $account->money + $_GET['amount'];
-				if($cashleft >= 0)
-				{
-					//TODO: Change that Message!
-					$that->flhook->msg(html_entity_decode($_GET['player']),"You just recieved ".$_GET['amount']."$ from ".$that->user->name);
-					
-					$flhook->addcash($player,-$_GET['amount']);
-					
-					//TODO: Add statement handling here!
-					
-					$sql = "UPDATE `".$settings['MySQL']['prefix']."bankaccounts` SET `money` = '".$moneyleft."' WHERE `id` =14";
-					$res = mysql_query($sql);
-				} else {
-					$that->redirect("Bank","manage","&id=".$id."&error=You don't have enough cash on your Char!");
-				}
-			} else {
-				$that->redirect("Bank","manage","&id=".$id."&error=Please login first!");
+				$belong = TRUE;
 			}
+		}
+		if($belong) // The ingame char MUST belongs to the user
+		{
+			$cashleft = $flhook->getcash($player) - $_GET['amount'];
+			$moneyleft = $account->money + $_GET['amount'];
+			
+			if($cashleft >= 0)
+			{				
+				$flhook->addcash($player,-$_GET['amount']);
+				
+				if($flhook->isloggedin($player))
+				{
+					$that->flhook->msg(html_entity_decode($_GET['player']),"FLSES Bank : ".$_GET['amount']."$ have been sent to ".$account->name);			 
+				}
+				
+				$sql = "UPDATE `".$settings['MySQL']['prefix']."bankaccounts` SET `money` = '".$moneyleft."' WHERE `id` ={$id}";
+				$res = mysql_query($sql);
+				mysql_query("INSERT INTO `".$settings['MySQL']['prefix']."bankstatements` VALUES ('{$id}', '', '{$_GET['amount']} $ has been took from player {$player} by user {$that->user->name}')") or die(mysql_error());
+				$that->redirect("Bank","manage","&id={$id}&message=More money in your wallet !");
+			}
+			else {
+					$that->redirect("Bank","manage","&id=".$id."&error=You don't have enough cash on your Char!");
+			}
+			
 		} else {
 			$that->redirect("Bank","manage","&id=".$id."&error=That Char is not connected to your Account!");
 		}
@@ -226,11 +257,11 @@ class Bank
 				if($row->status == "owner")
 				{
 					$users .= '<td width="33%">';
-					$users .= '<a style="color: #FF6600" href="'.cFlsesAdress.'?menu=Bank&submenu=managedel&id='.$account->id.'&usrid='.$row->userid.'">'.$result->name.'</a>';
+					$users .= '<a style="color: #FF6600" href="'.$settings['FLSES']['adress'].'?menu=Bank&submenu=managedel&id='.$account->id.'&usrid='.$row->userid.'">'.$result->name.'</a>';
 					$users .= '</td>';
 				} else {
 					$users .= '<td width="33%">';
-					$users .= '<a href="'.cFlsesAdress.'?menu=Bank&submenu=managedel&id='.$account->id.'&usrid='.$row->userid.'">'.$result->name.'</a>';
+					$users .= '<a href="'.$settings['FLSES']['adress'].'?menu=Bank&submenu=managedel&id='.$account->id.'&usrid='.$row->userid.'">'.$result->name.'</a>';
 					$users .= '</td>';
 				}
 			}
@@ -254,6 +285,9 @@ class Bank
 		print $template->output();
 	}
 	
+	/**
+	* Diplays a form to send money to a char
+	*/
 	public function sendmoney($that,$settings)
 	{
 		global $flhook;
@@ -282,6 +316,98 @@ class Bank
 		$template->replace("bigtitle","MANAGE ACCOUNT");
 		$template->replace("content",$cont);
 		print $template->output();
+	}
+	
+	/**
+	* Diplays a form for getting money from a char
+	*/
+	public function getmoney($that,$settings)
+	{
+		global $flhook;
+
+		$id = $_GET['id'];
+		$title = "Bank - Manage Account - Get Money";
+		$account = $this->accounts[$id];
+
+		if($account)
+		{
+			$users .= '</tr>';
+			$template = new Template("{$this->dir}/templates/managetake.html");
+			$template->replace("name",$account->name);
+			$template->replace("balance",$account->money);
+			$template->replace("id",$account->id);
+			$template->replace("users",$users);
+			$cont .= $template->output();
+
+		} else {
+			$that->redirect("Bank","overview");
+		}
+
+		$template = new Template("./templates/main.html");
+		$template->replace("title",$title);
+		$template->replace("message",$error);
+		$template->replace("bigtitle","MANAGE ACCOUNT");
+		$template->replace("content",$cont);
+		print $template->output();
+	}
+	
+	public function statement($that, $settings)
+	{
+		$title = "Bank - Manage Account - Get Money";
+		$id = $_GET['id'];
+		$account = $this->accounts[$id];
+		
+		if($account)
+		{
+			if($account->status == "user" || $account->status == "owner")
+			{
+				$statements = "";
+				$req = mysql_query("SELECT statement FROM `".$settings['MySQL']['prefix']."bankstatements` WHERE `id` = {$id}");
+				while($res = mysql_fetch_object($req))
+				{
+					$statements .= $res->statement.'<br/>';
+				}
+				
+				$template = new Template("{$this->dir}/templates/statements.html");
+				$template->replace("statements",$statements);
+				$template->replace("id",$account->id);
+				$cont .= $template->output();
+			
+				$template = new Template("./templates/main.html");
+				$template->replace("title",$title);
+				$template->replace("message",$error);
+				$template->replace("bigtitle","Account Statements");
+				$template->replace("content",$cont);
+				print $template->output();
+			}
+			else
+			{
+				$that->redirect("Bank", "overview", "&error=You can't do that !");
+			}
+		}
+		else {
+			$that->redirect("Bank","overview", "&error=Missing account ID");
+		}
+	}
+	
+	public function clearstatements($that,$settings)
+	{
+		$id = htmlentities($_GET['id']);
+		if($id == '')
+		{
+			$that->redirect("Bank", "overview", "&error=Missing account ID");
+		}
+		$account = $this->accounts[$id];
+		
+		if($account->status == "owner")
+		{
+			mysql_query("DELETE FROM `".$settings['MySQL']['prefix']."bankstatements` WHERE `id` = {$id}");
+			$that->redirect("Bank", "manage", "&id={$id}");
+		}
+		else
+		{
+			$that->redirect("Bank", "manage", "&id={$id}&error=You can't do that !");
+		}
 	}
 }
 

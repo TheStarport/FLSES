@@ -29,7 +29,7 @@ if($result)
 {
         while($char = mysql_fetch_array($result))
         {
-                $hint .= '<option>'.$char['name']."</option>";
+                $hint .= '<option>'.$char['name']."<br/></option>";
         }
 }
 
