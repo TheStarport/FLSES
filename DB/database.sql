@@ -185,18 +185,25 @@ CREATE TABLE IF NOT EXISTS `flses_userchars` (
 -- Tabellenstruktur für Tabelle `flses_users`
 --
 
-CREATE TABLE IF NOT EXISTS `flses_users` (
+CREATE TABLE `flses_users` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` text character set utf8 collate utf8_bin NOT NULL,
+  `password` text character set utf8 collate utf8_bin NOT NULL,
+  `access` text character set utf8 collate utf8_bin NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `flses_bankstatements`
+--
+
+CREATE TABLE `flses_bankstatements` (
   `id` int(11) NOT NULL,
-  `name` text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `password` text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `access` text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Daten für Tabelle `flses_users`
---
-
-INSERT INTO `flses_users` (`id`, `name`, `password`, `access`) VALUES
-(500, 'tai', '202cb962ac59075b964b07152d234b70', 'admin=20');
+  `msg_id` int(11) NOT NULL auto_increment,
+  `statement` text collate latin1_german2_ci NOT NULL,
+  PRIMARY KEY  (`msg_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=1 ;
 
