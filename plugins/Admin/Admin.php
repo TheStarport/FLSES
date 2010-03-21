@@ -2,7 +2,7 @@
 ##################################################################################
 ##                                                                              ##
 ##      This File is Part of the FLSES Project, released under GNU GPL v3       ##
-##      Copyright © 2009 tai(agent00tai@yahoo.de)                               ##
+##      Copyright ï¿½ 2009 tai(agent00tai@yahoo.de)                               ##
 ##                                                                              ##
 ##      This program is free software: you can redistribute it and/or modify    ##
 ##      it under the terms of the GNU General Public License as published by    ##
